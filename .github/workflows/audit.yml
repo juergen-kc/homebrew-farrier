@@ -1,0 +1,28 @@
+name: Audit
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Use this checkout as the tap
+        run: |
+          TAPS="$(brew --repository)/Library/Taps/juergen-kc"
+          mkdir -p "$TAPS"
+          ln -sfn "$GITHUB_WORKSPACE" "$TAPS/homebrew-farrier"
+      - name: brew style
+        run: brew style juergen-kc/farrier
+      - name: brew audit
+        run: |
+          if [[ -f Casks/farrier.rb ]]; then
+            brew audit --cask --strict juergen-kc/farrier/farrier
+          else
+            echo "no cask yet (it arrives with the first release)"
+          fi
