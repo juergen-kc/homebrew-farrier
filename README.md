@@ -10,12 +10,17 @@ brew install --cask juergen-kc/farrier/farrier
 Then, as yourself:
 
 ```bash
-farrier helper register   # allow Farrier in System Settings → General → Login Items
-farrier setup             # the approval key (an admin dialog appears)
+farrier helper register           # allow Farrier in System Settings → General → Login Items
+farrier setup                     # the approval key (an admin dialog appears); run it again every 30 days
+farrier helper full-disk-access   # turn Farrier on under Privacy & Security → Full Disk Access
 ```
 
+Only Farrier's root helper uses Full Disk Access, never your terminal or AI client. Then try `farrier posture` and
+`farrier inventory`, or connect it to an MCP client with
+`claude mcp add --scope user farrier -- /Applications/Farrier.app/Contents/MacOS/farrier mcp`.
+
 The cask installs `Farrier.app` owned by root and a `farrier` wrapper on your PATH. `brew uninstall --cask farrier`
-removes the helper registration, the approval key, the app and the wrapper; `brew uninstall --zap --cask farrier`
+removes the helper registration, the approval key, the Full Disk Access grant, the app and the wrapper; `brew uninstall --zap --cask farrier`
 also removes the journals, plans and exceptions.
 
 `Casks/farrier.rb` is updated by Farrier's release workflow; please open issues in the
